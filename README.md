@@ -17,7 +17,7 @@ Now, in app.js when you're setting up your modules, simply add 'apostrophe-rapha
 modules: {
   'apostrophe-ui-2': { },
   'apostrophe-editor-2': { },
-  'apostrophe-raphael': { }
+  'apostrophe-raphael': { },
   // ... and so on
 }
 ```
@@ -37,8 +37,7 @@ Lastly, add the menu to the Apostrophe admin bar so our content can be edited. I
 
 ```html
 {{ aposPagesMenu({ page: page, edit: edit }) }}
-{{ aposBlogMenu(permissions) }}
-          
+
 <!-- right in here -->
 {{ aposRaphaelMenu(permissions) }}
           
