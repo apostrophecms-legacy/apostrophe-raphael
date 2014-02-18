@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block bodyClass %}{{ super() }} apos-raphael-page{% endblock %}
+
+{% block mainContent %}
+  <div class="column">
+    <h1>HEY</h1>
+    <div class="apos-raphael-container">
+      <div id="apos-raphael-target">
+
+      </div>
+
+      <script type="text/javascript">
+        $(function(){
+          // aposR
+          console.log(apos.data.raphaelMapOptions);
+          var randy = new AposRaphaelMap(apos.data.raphaelMapOptions);
+        });
+      </script>
+    </div>
+
+    {{ items | json }}
+  </div>
+{% endblock %}

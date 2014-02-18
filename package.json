@@ -1,0 +1,33 @@
+{
+  "name": "apostrophe-raphael",
+  "version": "0.5.0",
+  "description": "Apostrophe's solution for simple vector maps. Subclasses apostrophe-snippets. Uses raphael.js.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/punkave/apostrophe-raphael.git"
+  },
+  "dependencies": {
+    "async": "~0.2.6",
+    "underscore": "~1.4.4",
+    "extend": "~1.2.1",
+    "apostrophe-snippets": "0.5.x"
+  },  
+  "keywords": [
+    "cms",
+    "apostrophe",
+    "punkave",
+    "maps",
+    "vectors",
+    "raphael"
+  ],
+  "author": "Kerry Gilbert <kerry@punkave.com> (http://punkave.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/punkave/apostrophe-raphael/issues"
+  },
+  "homepage": "https://github.com/punkave/apostrophe-raphael"
+}
