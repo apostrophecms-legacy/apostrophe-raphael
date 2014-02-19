@@ -1,43 +1,115 @@
-var AposRaphaelMap = function(options) {
+var AposRenderRaphaelMap = function(options) {
   var self = this;
 
-
   self.map = {};
-  self.activeState = null;
+  self.activeRegion = null;
+  self.hoveredRegion = null;
   self.svg = options.svg;
   self.styles = {
-    fill: "#333",
-    stroke: "#666",
-    "stroke-width": 1,
-    "stroke-linejoin": "round"
-  }
-
-  self.init = function() {
-    var R = Raphael("apos-raphael-target", 1200, 600);
-    // R.setViewBox(0,0,2400, 1200, true);
-
-    // NEEDS MUCH FIXING:
-    for(s in self.svg.shapes) {
-      var path = self.svg.shapes[s];
-
-      self.map[s] = R.path(path).attr(self.styles);
-      self.map[s].color = Raphael.getColor();
-      self.attachListeners(self.map[s], s);      
+    scale: options.scale || 1.2,
+    fade: options.fade || false,
+    inactive: {
+      fill: "#eee",
+      stroke: "#fff",
+      "stroke-width": 1,
+      "stroke-linejoin": "round"
+    },
+    default: {
+      fill: "#005E6C"
+    },
+    hover: {
+      fill: "#007F8F"
+    },
+    active: {
+      fill: "#EB1725"
     }
   }
 
-  self.attachListeners = function(st, state) {
-    st[0].style.cursor = "pointer";
+  self.regions = options.regions || {};
+  self.el = options.selector || 'apos-raphael-target';
 
-    st[0].onmouseover = function() {
-      if(self.activeState) {
-        self.activeState.animate({fill: "#194865"}, 200);
+  console.log(self.regions)
+
+  self.init = function() {
+    var R = Raphael(self.el, 935, 590);
+    var scale = 0.8;
+    var realScale = (1 / scale);
+
+    var scaleX = 935 * realScale;
+    var scaleY = 590 * realScale;
+
+    // (1 / 0.25) * 0.25 * 0.25
+    // R.setViewBox(0,0,scaleX, scaleY, true);
+    R.setViewBox(0,0,scaleX, scaleY, true);
+
+    for(s in self.svg.shapes) {
+      var path = self.svg.shapes[s];
+      self.map[s] = R.path(path).attr(self.styles.inactive);
+      self.map[s].color = Raphael.getColor();
+      
+      if(self.regions[s.toUpperCase()]) {
+        self.map[s].attr(self.styles.default)
+        self.attachListeners(self.map[s], s);        
+      }
+    }
+  }
+
+  self.attachListeners = function(path, region) {
+    path[0].style.cursor = "pointer";
+
+    path[0].onmouseover = function() {
+      if(path != self.activeRegion) {
+        self.hoveredRegion = path;
+        path.animate(self.styles.hover, 150);
+      }
+    }
+
+    path[0].onmouseout = function() {
+      if(self.hoveredRegion) {
+        self.hoveredRegion.animate(self.styles.default, 150);
+      }
+    }
+
+    path[0].onclick = function() {
+      if(self.activeRegion) {
+        self.activeRegion.animate(self.styles.default, 150);
       }
 
-      self.activeState = st;
-      st.animate({fill: "#89B91F"}, 200);      
+      self.activeRegion = path;
+      self.hoveredRegion = null;
+      path.animate(self.styles.active, 150);
+
+      self.loadSidebar(region);
+    }
+  }
+
+  self.loadSidebar = function(region) {
+    var region = self.regions[region.toUpperCase()];
+    var $sidebar = apos.fromTemplate('.apos-raphael-sidebar-inner');
+    for(i in region) {
+      var field = $sidebar.find('[data-'+i+']');
+      if(field.length && field.is('a')) {
+        field.attr('href', region[i])
+      } else {
+        field.html(region[i]);
+      }
+    }
+
+    if(options.fade) {
+      $('.apos-raphael-sidebar').fadeOut('50', function(){
+        $('.apos-raphael-sidebar').html($sidebar);
+        $('.apos-raphael-sidebar').fadeIn('50');
+      });      
+    } else {
+      $('.apos-raphael-sidebar').html($sidebar);
     }
   }
 
   self.init();
+
+  $(function(){
+    $('body').on('aposReady', function(){
+      console.log('ahhhhhh')
+    })
+  })
 }

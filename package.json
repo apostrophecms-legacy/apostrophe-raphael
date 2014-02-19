@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "async": "~0.2.6",
-    "underscore": "~1.4.4",
+    "underscore": "*",
     "extend": "~1.2.1",
     "apostrophe-snippets": "0.5.x"
   },  

@@ -1,0 +1,12 @@
+{% if edit %}
+
+<ul class="apos-admin-bar-item apos-accordion-menu">
+  <li class="apos-accordion-title"><i class="{{ menuIcon }}"></i> {{ pluralLabel }}</li>
+  <li class="apos-accordion-items">
+    <ul class="apos-page-bar">
+      <li href="#" class="apos-control apos-accordion-item apos-button apos-new-button apos-new-snippet-button" {{ newButtonData }}>Enable {{ instanceLabel }}</li>
+      <li href="#" class="apos-control apos-accordion-item apos-button apos-manage-button apos-manage-snippet-button" {{ manageButtonData }}>Manage {{ instanceLabel }}s</li>
+    </ul>
+  </li>
+</ul>
+{% endif %}

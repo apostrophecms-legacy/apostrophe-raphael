@@ -2,22 +2,30 @@
 {% block bodyClass %}{{ super() }} apos-raphael-page{% endblock %}
 
 {% block mainContent %}
-  <div class="column">
-    <h1>HEY</h1>
+  <div>
+    <h1>{{ page.title | e }}</h1>
+
     <div class="apos-raphael-container">
       <div id="apos-raphael-target">
 
       </div>
 
       <script type="text/javascript">
-        $(function(){
-          // aposR
-          console.log(apos.data.raphaelMapOptions);
-          var randy = new AposRaphaelMap(apos.data.raphaelMapOptions);
-        });
-      </script>
-    </div>
+        var raphaelOptions = {
+          selector: 'apos-raphael-target',
+          regions: {{ aposPruneRaphaelData(items) | json }},
+          svg: {{ raphaelSvg | json }},
+          // fade: true
+        }
 
-    {{ items | json }}
+        $(function(){
+          var raph = new AposRenderRaphaelMap(raphaelOptions);
+        });
+
+      </script>
+
+      <div class="apos-raphael-sidebar">
+      </div>
+    </div>
   </div>
 {% endblock %}
