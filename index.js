@@ -54,16 +54,23 @@ raphael.Raphael = function(options, callback) {
     }
   ].concat(options.addFields || []);
 
-  options.removeFields = ['tags', 'thumbnail', 'hideTitle']
+  self.addedFields = [];
+  for(var n in options.addFields) {
+    self.addedFields.push(options.addFields[n].name);
+  }
+
+
+  options.removeFields = ['tags', 'thumbnail', 'hideTitle'].concat(options.removeFields || []);
   options.modules = (options.modules || []).concat([ { dir: __dirname, name: 'raphael' } ]);
   snippets.Snippets.call(this, options, null);  
 
   self._apos.addLocal('aposPruneRaphaelData', function(data) {
     var regions = _.map(data, function(region) {
-      region = _.pick(region, 'slug', 'areas', 'title','region','url');
-      if(region.areas.body.items[0]) {
-        region.content = region.areas.body.items[0].content;
-        delete region.areas;
+
+      var allowedKeys = ['slug','region','url'].concat(self.addedFields)
+      region = _.pick(region, allowedKeys);
+      if(region.body && region.body.items[0]) {
+        region.content = region.body.items[0].content;
       }
 
       return region;
@@ -80,8 +87,12 @@ raphael.Raphael = function(options, callback) {
 
   self.beforeIndex = function(req, snippets, callback) {
     // Pass some of our options to the front-end js.
-    req.extras.raphaelSvg = self.svgData;
-    return callback(null);
+    options.apos.pages.distinct('title', { type: 'region', trash: { $ne: true } }, function(err, used){
+      req.extras.usedRegions = used;
+      req.extras.raphaelSvg = self.svgData;
+      req.extras.raphaelStyles = options.styles || {};
+      return callback(null);
+    });
   };
  
   self.pushAsset('script', 'raphael.min', { when: 'always' });
@@ -89,14 +100,8 @@ raphael.Raphael = function(options, callback) {
   self.pushAsset('stylesheet', 'content', { when: 'always' });
 
   if(callback) {
-    options.apos.pages.distinct('title', { type: 'region', trash: { $ne: true } }, function(err, used){
-      self._apos.pushGlobalData({
-        usedRegions: used
-      });
-
-      return process.nextTick(function() {
-        return callback(null);
-      });
+    return process.nextTick(function() {
+      return callback(null);
     });
   }
 };

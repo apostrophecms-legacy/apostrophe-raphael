@@ -6,29 +6,27 @@ var AposRenderRaphaelMap = function(options) {
   self.hoveredRegion = null;
   self.svg = options.svg;
   self.styles = {
-    scale: options.scale || 1.2,
-    fade: options.fade || false,
+    scale: options.styles.scale || 1.1,
+    fade: options.styles.fade || false,
     inactive: {
-      fill: "#eee",
-      stroke: "#fff",
-      "stroke-width": 1,
+      fill: options.styles.inactiveFill || "#eee",
+      stroke: options.styles.stroke || "#fff",
+      "stroke-width": options.styles.strokeWidth || 1,
       "stroke-linejoin": "round"
     },
     default: {
-      fill: "#005E6C"
+      fill: options.styles.defaultFill || "#005E6C"
     },
     hover: {
-      fill: "#007F8F"
+      fill: options.styles.hoverFill || "#007F8F"
     },
     active: {
-      fill: "#EB1725"
+      fill: options.styles.activeFill || "#EB1725"
     }
   }
 
   self.regions = options.regions || {};
   self.el = options.selector || 'apos-raphael-target';
-
-  console.log(self.regions)
 
   self.init = function() {
     var R = Raphael(self.el, 935, 590);
@@ -85,7 +83,9 @@ var AposRenderRaphaelMap = function(options) {
 
   self.loadSidebar = function(region) {
     var region = self.regions[region.toUpperCase()];
+    console.log(region)
     var $sidebar = apos.fromTemplate('.apos-raphael-sidebar-inner');
+
     for(i in region) {
       var field = $sidebar.find('[data-'+i+']');
       if(field.length && field.is('a')) {
@@ -107,9 +107,8 @@ var AposRenderRaphaelMap = function(options) {
 
   self.init();
 
-  $(function(){
-    $('body').on('aposReady', function(){
-      console.log('ahhhhhh')
-    })
-  })
+  $('body.apos-raphael-page').on('aposModalHide', function() {
+    self.init();
+  });
+
 }

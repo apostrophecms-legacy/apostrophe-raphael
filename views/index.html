@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block bodyClass %}{{ super() }} apos-raphael-page{% endblock %}
 
-{% block mainContent %}
+{% block main %}
   <div>
     <h1>{{ page.title | e }}</h1>
 
@@ -15,10 +15,11 @@
           selector: 'apos-raphael-target',
           regions: {{ aposPruneRaphaelData(items) | json }},
           svg: {{ raphaelSvg | json }},
-          // fade: true
+          styles: {{ raphaelStyles | json }}
         }
 
         $(function(){
+          apos.data.usedRegions = {{ usedRegions | json }};
           var raph = new AposRenderRaphaelMap(raphaelOptions);
         });
 
