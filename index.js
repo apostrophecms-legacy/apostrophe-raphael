@@ -23,6 +23,12 @@ raphael.Raphael = function(options, callback) {
     perPage: 1000,
   });
 
+  options.apos.mixinModuleAssets(self, 'raphael', __dirname, options);
+  self.pushAsset('script', 'raphael.min', { when: 'always' });
+  self.pushAsset('template', 'sidebar', { when: 'always' });
+  self.pushAsset('template', 'popover', { when: 'always' });
+  self.pushAsset('stylesheet', 'content', { when: 'always' });
+
   self.svgData = require('./maps/'+options.mapType);
 
   var regionChoices = function(names) {
@@ -95,10 +101,6 @@ raphael.Raphael = function(options, callback) {
     });
   };
  
-  self.pushAsset('script', 'raphael.min', { when: 'always' });
-  self.pushAsset('template', 'sidebar', { when: 'always' });
-  self.pushAsset('stylesheet', 'content', { when: 'always' });
-
   if(callback) {
     return process.nextTick(function() {
       return callback(null);
