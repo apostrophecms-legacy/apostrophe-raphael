@@ -1,6 +1,6 @@
 {
   "name": "apostrophe-raphael",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Apostrophe's solution for simple vector maps. Subclasses apostrophe-snippets. Uses raphael.js.",
   "main": "index.js",
   "scripts": {
